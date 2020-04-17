@@ -1,1 +1,1 @@
-from .JSON_task import JSON
+from .JSON_task import JSON, Company

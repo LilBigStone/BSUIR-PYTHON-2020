@@ -1,1 +1,1 @@
-from .SingleTone import MetaSingleton
+from .SingleTone import MetaSingleton, Check

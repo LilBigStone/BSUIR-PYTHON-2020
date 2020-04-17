@@ -1,73 +1,92 @@
-import numpy as np
-import math
-import unittest
+from cmath import sqrt
 
 
 class Vector:
-    def __init__(self, *a):
-        self.a = a
 
-    def __check(self, *v):
-        try:
-            if len(self.a) != len(v):
-                raise Exception("The dimension of the vectors must match")
-        except Exception as e:
-            print("The dimension of the vectors must match")
+    def __init__(self, size, *values):
+        self._dimension = size
+        self._vector = self.validate_input(list(values)) or [0] * size
 
-    def get(self):
-        return [i for i in self.a]
+    def validate_input(self, values):
+        if values:
+            for val in values:
+                if not isinstance(val, (int, float)):
+                    raise ValueError('Components of the vector must be the numbers (integer or float).')
+            if len(values) > self._dimension:
+                while len(values) != self._dimension:
+                    values.pop()
+            elif len(values) < self._dimension:
+                difference = self._dimension - len(values)
+                values.extend([0.0] * difference)
+        return values
 
-    def plus(self, *plus_vector):
-        self.__check(*plus_vector)
-        self.a = [i + j for i, j in zip(self.a, plus_vector)]
-        return self.a
+    def __str__(self):
+        return f'<{str(self._vector)[1:-1]}>'
 
-    def id(self, i):
-        return self.a[i]
+    def __repr__(self):
+        return f'<{str(self._vector)[1:-1]}>'
 
-    def minus(self, *v):
-        self.__check(*v)
-        self.a = [i - j for i, j in zip(self.a, v)]
-        return self.a
+    def __len__(self):
+        return self._dimension
 
-    def multiply_const(self, v):
-        self.a = [v * i for i in self.a]
-        return self.a
+    def __getitem__(self, index):
+        if index < -len(self) or index >= len(self):
+            raise IndexError(f'Vector index [{index}] out of range.')
+        return self._vector[index]
 
-    def multiply_vector(self, *v):
-        self.__check(*v)
-        self.a = np.cross(self.get(), [i for i in v])
-        return self.a
+    def __setitem__(self, index, value):
+        if index < -len(self) or index >= len(self):
+            raise IndexError(f'Vector index [{index}] out of range.')
+        if not isinstance(value, (int, float)):
+            raise ValueError('Components of the vector must be the numbers (integer or float).')
+        self._vector[index] = value
 
-    def len(self):
-        return math.sqrt(sum(map(lambda i: i * i, self.a)))
+    def __neg__(self):
+        return Vector(self._dimension, *[-val for val in self])
 
-    def compare(self, v):
-        if v.get() == self.get():
-            return True
+    def __add__(self, other):
+        if isinstance(other, Vector):
+            if len(self) != len(other):
+                raise ValueError('Vectors must have the same dimensions to perform an operation')
+            return Vector(len(self), *[self[i] + other[i] for i in range(len(self))])
+        elif isinstance(other, (int, float)):
+            return Vector(len(self), *[val + other for val in self])
+        else:
+            raise ValueError('Operation supports the following input: Vector object or number (integer or float)')
+
+    def __radd__(self, other):
+        return self + other
+
+    def __iadd__(self, other):
+        return self + other
+
+    def __sub__(self, other):
+        return self + (-other)
+
+    def __rsub__(self, other):
+        return -self + other
+
+    def __isub__(self, other):
+        return self + (-other)
+
+    def __eq__(self, other):
+        if isinstance(other, Vector):
+            return self._vector == other._vector
         else:
             return False
 
-    def __str__(self):
-        return "Vector: {}".format(self.a)
+    def __mul__(self, other):
+        if isinstance(other, Vector):
+            if len(self) != len(other):
+                raise ValueError('Vectors must have the same dimensions to perform an operation')
+            return sum(Vector(len(self), *[self[i] * other[i] for i in range(len(self))]))
+        elif isinstance(other, (int, float)):
+            return Vector(len(self), *[val * other for val in self])
+        else:
+            raise ValueError('Operation supports the following input: Vector object or number (integer or float)')
 
+    def __rmul__(self, other):
+        return self * other
 
-class TestVector(unittest.TestCase):
-    def setUp(self):
-        self.x = Vector(1, 2, 3)
-        self.y = Vector(1, 2, 3)
-
-    def test_multiply(self):
-        self.assertEqual(self.x.id(0), 1)
-
-    def test_compare(self):
-        self.assertTrue(self.x.compare(self.y))
-
-    def test_multiply_vector(self):
-        self.x.multiply_vector(2, 3, 4)
-        lst = self.x.get()
-        self.assertEqual(lst, [-1, 2, -1])
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def __imul__(self, other):
+        return self * other

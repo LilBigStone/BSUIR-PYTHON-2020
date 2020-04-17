@@ -1,4 +1,5 @@
 import functools
+import unittest
 
 
 def cached(function):
@@ -13,12 +14,7 @@ def cached(function):
 
     return function_counter
 
+
 @cached
 def multiply(a, b):
-    print("Функция вызвана")
     return a*b
-
-
-if __name__ == "__main__":
-    print(multiply(3, 4))
-    print(multiply(3, 4))

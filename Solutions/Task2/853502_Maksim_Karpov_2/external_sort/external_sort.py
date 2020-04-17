@@ -1,27 +1,6 @@
 import os
 import tempfile
 import random
-import unittest
-
-
-class SortUnitTest(unittest.TestCase):
-
-    def setUp(self):
-        self.UniSort = ExternalSort(5, 4000, "unittest_file.txt", "unittest_sorted.txt")
-
-    def test_is_sorted(self):
-
-        test_string = []
-        test_string2 = []
-        with open('unittest_sorted.txt', 'r') as test_file:
-            test_string = test_file.read().splitlines()
-            test_string = [int(item) for item in test_string]
-        with open(self.UniSort.file, 'r') as test_file_2:
-            test_string2 = test_file_2.read().splitlines()
-            test_string2 = [int(item) for item in test_string2]
-            test_string2.sort()
-
-        self.assertEqual(test_string, test_string2)
 
 
 class ExternalSort:
@@ -124,7 +103,7 @@ class ExternalSort:
 if __name__ == "__main__":
 
     main_test = ExternalSort(10, 100000, "random_digits.txt", "sorted_numbers.txt")
-    unittest.main()
+
 
 
 
