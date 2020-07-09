@@ -23,7 +23,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a96@0=+omc!xmt4t)pf^5kuuu__+kb)mhy0t$!dvwi8w)_xiwj'
+SECRET_KEY = 'DELETE_FOR_SECURE'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -135,7 +135,7 @@ STATIC_URL = '/static/'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'lilstone1337@gmail.com'
-EMAIL_HOST_PASSWORD = 'F_allout345'
+EMAIL_HOST_PASSWORD = 'DELETE_FOR_SECURE'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
